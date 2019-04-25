@@ -1,0 +1,6 @@
+﻿  Polynomial.cpp
+c:\users\a3265\source\repos\project2_em\project2_em\polynomial.cpp(79): warning C4018: '<': signed/unsigned 不相符
+c:\users\a3265\source\repos\project2_em\project2_em\polynomial.cpp(137): warning C4018: '<': signed/unsigned 不相符
+c:\users\a3265\source\repos\project2_em\project2_em\polynomial.cpp(14): warning C4101: 'v_last': 未參考的區域變數
+  MyForm.obj : 發現 MSIL 模組。MSIL 的累加連結已停用。正在執行完整連結
+  Project2_EM.vcxproj -> C:\Users\a3265\source\repos\Project2_EM\Debug\Project2_EM.exe
