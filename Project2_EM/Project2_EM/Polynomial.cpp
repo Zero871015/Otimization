@@ -4,78 +4,19 @@
 
 Polynomial::Polynomial()
 {
+	this->last = NULL;
+	this->term = NULL;
 }
 
 Polynomial::Polynomial(std::string str)
 {
-	std::string coef_s = "";
-	std::string exp_s = "";
-	
-	Variable *v_new, *v_last;
-	v_new = new Variable[1];
+	//initialize linked list pointer
+	this->last = NULL;
+	this->term = NULL;
 
-
-	std::vector<std::string> terms;
-
-	int level = 0;
-	/*
-	for (int i = 0; i <= (int)str.size(); i++)
-	{
-		if (level == 0)	//coef
-		{
-			if (str[i] == '*')
-			{
-				if (coef_s == "" || coef_s == "-")
-					coef_s += "1";
-				term.coef = std::stod(coef_s);
-				level = 1;
-				coef_s = "";
-			}
-			else
-			{
-				coef_s += str[i];
-			}
-		}
-		else if (level == 1)	//name
-		{
-			v_new->name = str[i];
-			level = 2;
-		}
-		else if (level == 2)	//exp
-		{
-			if (str[i] == '^');
-			else if ((str[i] >= '0'&&str[i] <= '9') || str[i] == '.')
-			{
-				exp_s += str[i];
-			}
-			else if (str[i] == '*')
-			{
-				if (exp_s == "")
-					exp_s = "1";
-				v_new->exp = std::stod(exp_s);
-				exp_s = "";
-				level = 1;
-				v_last->next = v_new;
-				v_last = v_new;
-				v_new = new Variable[1];
-			}
-			else
-			{
-				if (exp_s == "")
-					exp_s = "1";
-				v_new->exp = std::stod(exp_s);
-				exp_s = "";
-				level = 0;
-				v_last->next = v_new;
-				v_last = v_new;
-				v_new = new Variable[1];
-			}
-		}
-
-	}
-	term.vars = term.vars->next;
-	*/
+	std::vector<std::string> terms;	//store every strings of term
 	std::string temp;
+	//TODO: split str to each term
 	for (int i = 0; i < str.length(); i++)
 	{
 		temp += str[i];
@@ -91,15 +32,18 @@ Polynomial::Polynomial(std::string str)
 		}
 	}
 
-
+	//TODO: run every string
 	for (int i = 0; i < (int)terms.size(); i++)
 	{
-		Term term;
+		Term *term = new Term;
 		temp = "";
 		bool isVarPart = false;
+
+		//TODO: convert each string of term to term
 		for (int j = 0; j < (int)terms[i].length(); j++)
 		{
 			Variable *var = new Variable;
+			//coefficient part
 			if (!isVarPart)
 			{
 				if ((terms[i][j] < '0' || terms[i][j] > '9') &&
@@ -107,12 +51,12 @@ Polynomial::Polynomial(std::string str)
 					terms[i][j] != '-' &&
 					terms[i][j] != '.')
 				{
+					//hide number will  when 1 or -1
 					if (temp == "" || temp == "-" || temp == "+")
 					{
 						temp += '1';
 					}
-					term.coef = std::stod(temp);
-					//if (terms[i][j] != '*')j--;
+					term->coef = std::stod(temp);
 					isVarPart = true;
 				}
 				else
@@ -120,12 +64,12 @@ Polynomial::Polynomial(std::string str)
 					temp += terms[i][j];
 				}
 			}
+			//variable part
 			if(isVarPart)
 			{
-
-				if (terms[i][j] == '*')j++;
-				//vars handle
+				if (terms[i][j] == '*') j++;
 				var->name = terms[i][j];
+				//hide number when exponent is 1 and j+1 over index
 				if (j + 1 == terms[i].length())
 				{
 					var->exp = 1;
@@ -141,16 +85,41 @@ Polynomial::Polynomial(std::string str)
 					}
 					var->exp = std::stod(temp);
 				}
+				//hide number when exponent is 1
 				else
 					var->exp = 1;
 
-				term.addVar(var);
+				term->addVar(var);
 			}
 			
 
-			
+		}
+		//only const number
+		if (!isVarPart)
+		{
+			if (temp == "" || temp == "-" || temp == "+")
+			{
+				temp += '1';
+			}
+			term->coef = std::stod(temp);
 		}
 
+		this->addTerm(term);
 		std::cout << std::endl;
+	}
+}
+
+//TODO: add new node to linked list
+void Polynomial::addTerm(Term* t)
+{
+	if (term == NULL)
+	{
+		term = t;
+		last = t;
+	}
+	else
+	{
+		last->next = t;
+		last = last->next;
 	}
 }

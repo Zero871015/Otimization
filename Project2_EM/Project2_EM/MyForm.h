@@ -65,8 +65,8 @@ namespace Project2EM {
 			// openFileDialog1
 			// 
 			this->openFileDialog1->FileName = L"openFileDialog1";
-			this->openFileDialog1->InitialDirectory = L"C:\\Users\\a3265\\Desktop\\Project2";
 			this->openFileDialog1->FileOk += gcnew System::ComponentModel::CancelEventHandler(this, &MyForm::openFileDialog1_FileOk);
+			this->openFileDialog1->InitialDirectory = System::Environment::CurrentDirectory;
 			// 
 			// textBox1
 			// 

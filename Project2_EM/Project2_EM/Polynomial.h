@@ -8,6 +8,11 @@ public:
 	Polynomial();
 	Polynomial(std::string);
 	Polynomial diff();
+
+	void addTerm(Term*);
+
 	Term *term;
+	Term *last;
+
 };
 

@@ -5,8 +5,10 @@ Term::Term()
 {
 	this->last = NULL;
 	this->vars = NULL;
+	this->next = NULL;
 }
 
+//TODO: add new node to linked list
 void Term::addVar(Variable* v)
 {
 	if (vars == NULL)
