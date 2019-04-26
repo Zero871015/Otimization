@@ -123,3 +123,37 @@ void Polynomial::addTerm(Term* t)
 		last = last->next;
 	}
 }
+
+//TODO: Given every variables, return the solution number.
+//Expection: variables not in map.
+double Polynomial::Solution(std::map<char, double> m)
+{
+	double sum = 0;
+	for (auto i = this->term; i != NULL; i = i->next)
+	{
+		double temp = i->coef;
+		for (auto j = i->vars; j !=NULL ; j=j->next)
+		{
+			temp *= pow(m[j->name], j->exp);
+		}
+		sum += temp;
+	}
+	return sum;
+}
+
+//TODO: Can only use when only one variable.
+//ERROR: Variables more than one, return number will be wrong.
+double Polynomial::Solution(double x)
+{
+	double sum = 0;
+	for (auto i = this->term; i != NULL; i = i->next)
+	{
+		double temp = i->coef;
+		for (auto j = i->vars; j != NULL; j = j->next)
+		{
+			temp *= pow(x, j->exp);
+		}
+		sum += temp;
+	}
+	return sum;
+}
