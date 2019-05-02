@@ -4,5 +4,4 @@
 
 Variable::Variable()
 {
-	this->next = NULL;
 }

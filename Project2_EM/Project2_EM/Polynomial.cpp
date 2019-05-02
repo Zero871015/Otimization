@@ -4,16 +4,10 @@
 
 Polynomial::Polynomial()
 {
-	this->last = NULL;
-	this->term = NULL;
 }
 
 Polynomial::Polynomial(std::string str)
 {
-	//initialize linked list pointer
-	this->last = NULL;
-	this->term = NULL;
-
 	std::vector<std::string> terms;	//store every strings of term
 	std::string temp;
 	//TODO: split str to each term
@@ -35,14 +29,14 @@ Polynomial::Polynomial(std::string str)
 	//TODO: run every string
 	for (int i = 0; i < (int)terms.size(); i++)
 	{
-		Term *term = new Term;
+		Term term;
 		temp = "";
 		bool isVarPart = false;
 
 		//TODO: convert each string of term to term
 		for (int j = 0; j < (int)terms[i].length(); j++)
 		{
-			Variable *var = new Variable;
+			Variable var;
 			//coefficient part
 			if (!isVarPart)
 			{
@@ -56,7 +50,7 @@ Polynomial::Polynomial(std::string str)
 					{
 						temp += '1';
 					}
-					term->coef = std::stod(temp);
+					term.coef = std::stod(temp);
 					isVarPart = true;
 				}
 				else
@@ -68,11 +62,11 @@ Polynomial::Polynomial(std::string str)
 			if(isVarPart)
 			{
 				if (terms[i][j] == '*') j++;
-				var->name = terms[i][j];
+				var.name = terms[i][j];
 				//hide number when exponent is 1 and j+1 over index
 				if (j + 1 == terms[i].length())
 				{
-					var->exp = 1;
+					var.exp = 1;
 				}
 				else if (terms[i][j+1] == '^')
 				{
@@ -83,13 +77,13 @@ Polynomial::Polynomial(std::string str)
 						temp += terms[i][j];
 						j++;
 					}
-					var->exp = std::stod(temp);
+					var.exp = std::stod(temp);
 				}
 				//hide number when exponent is 1
 				else
-					var->exp = 1;
+					var.exp = 1;
 
-				term->addVar(var);
+				term.addVar(var);
 			}
 			
 
@@ -101,7 +95,7 @@ Polynomial::Polynomial(std::string str)
 			{
 				temp += '1';
 			}
-			term->coef = std::stod(temp);
+			term.coef = std::stod(temp);
 		}
 
 		this->addTerm(term);
@@ -110,34 +104,27 @@ Polynomial::Polynomial(std::string str)
 }
 
 //TODO: add new node to linked list
-void Polynomial::addTerm(Term* t)
+void Polynomial::addTerm(Term t)
 {
-	if (term == NULL)
-	{
-		term = t;
-		last = t;
-	}
-	else
-	{
-		last->next = t;
-		last = last->next;
-	}
+	this->term.push_back(t);
 }
 
 //TODO: Given every variables, return the solution number.
 //Expection: variables not in map.
-double Polynomial::Solution(std::map<char, double> m)
+double Polynomial::Solution(std::map<std::string, double> m)
 {
 	double sum = 0;
-	for (auto i = this->term; i != NULL; i = i->next)
+	for (int i = 0; i < (int)this->term.size(); i++)
 	{
-		double temp = i->coef;
-		for (auto j = i->vars; j !=NULL ; j=j->next)
+		Term t = this->term[i];
+		double temp = t.coef;
+		for (int j = 0; j < (int)this->term[i].vars.size(); j++)
 		{
-			temp *= pow(m[j->name], j->exp);
+			temp *= pow(m[t.vars[j].name], t.vars[j].exp);
 		}
 		sum += temp;
 	}
+
 	return sum;
 }
 
@@ -146,14 +133,43 @@ double Polynomial::Solution(std::map<char, double> m)
 double Polynomial::Solution(double x)
 {
 	double sum = 0;
-	for (auto i = this->term; i != NULL; i = i->next)
+	for (int i = 0; i < (int)this->term.size(); i++)
 	{
-		double temp = i->coef;
-		for (auto j = i->vars; j != NULL; j = j->next)
+		Term t = this->term[i];
+		double temp = t.coef;
+		for (int j = 0; j < (int)this->term[i].vars.size(); j++)
 		{
-			temp *= pow(x, j->exp);
+			temp *= pow(x, t.vars[j].exp);
 		}
 		sum += temp;
 	}
 	return sum;
+}
+
+Polynomial Polynomial::GivenNum(std::map<std::string, double> m)
+{
+	Polynomial ans = *this;
+	for (int i = 0; i < (int)ans.term.size(); i++)
+	{
+		for (int j = 0; j < ans.term[i].vars.size(); j++)
+		{
+			if (m.find(ans.term[i].vars[j].name) != m.end())
+			{
+				ans.term[i].coef *= pow(m[ans.term[i].vars[j].name], ans.term[i].vars[j].exp);
+				ans.term[i].vars.erase(ans.term[i].vars.begin() + j);
+			}
+		}
+	}
+	return ans;
+}
+
+Polynomial Polynomial::VartoPoly(char name, Polynomial p)
+{
+	for (int i = 0; i < this->term.size(); i++)
+	{
+		for (int j = 0; j < this->term[i].vars.size(); j++)
+		{
+
+		}
+	}
 }

@@ -105,6 +105,8 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies />
+      <SubSystem>Console</SubSystem>
+      <EntryPointSymbol>Main</EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -133,16 +135,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Golden.cpp" />
     <ClCompile Include="MyForm.cpp" />
     <ClCompile Include="Polynomial.cpp" />
+    <ClCompile Include="Powell.cpp" />
     <ClCompile Include="Term.cpp" />
     <ClCompile Include="Variable.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Golden.h" />
     <ClInclude Include="MyForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="Polynomial.h" />
+    <ClInclude Include="Powell.h" />
     <ClInclude Include="Term.h" />
     <ClInclude Include="Variable.h" />
   </ItemGroup>

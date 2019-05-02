@@ -27,6 +27,12 @@
     <ClCompile Include="Variable.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
+    <ClCompile Include="Powell.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+    <ClCompile Include="Golden.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyForm.h">
@@ -41,5 +47,16 @@
     <ClInclude Include="Variable.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
+    <ClInclude Include="Powell.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="Golden.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="MyForm.resx">
+      <Filter>資源檔</Filter>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>

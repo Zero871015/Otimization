@@ -3,22 +3,10 @@
 
 Term::Term()
 {
-	this->last = NULL;
-	this->vars = NULL;
-	this->next = NULL;
 }
 
 //TODO: add new node to linked list
-void Term::addVar(Variable* v)
+void Term::addVar(Variable v)
 {
-	if (vars == NULL)
-	{
-		vars = v;
-		last = v;
-	}
-	else
-	{
-		last->next = v;
-		last = last->next;
-	}
+	vars.push_back(v);
 }

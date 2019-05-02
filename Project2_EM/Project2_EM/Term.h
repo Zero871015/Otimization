@@ -1,16 +1,14 @@
 #pragma once
 #include "Variable.h"
+#include <vector>
 class Term
 {
 public:
 	Term();
 	double coef;
-	Variable *vars;
-	Variable *last;
+	std::vector<Variable> vars;
 
-	Term *next;
-
-	void addVar(Variable*);
+	void addVar(Variable);
 
 };
 

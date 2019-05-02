@@ -1,11 +1,10 @@
 #pragma once
+#include <string>
 class Variable
 {
 public:
 	Variable();
-	char name;
+	std::string name;
 	double exp;
-	Variable *next;
-
 };
 
