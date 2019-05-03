@@ -16,5 +16,6 @@ public:
 	std::string Replace(std::string, std::string);
 
 	std::string data;
+	friend void ShowVars(std::map<std::string, double>);
 };
 

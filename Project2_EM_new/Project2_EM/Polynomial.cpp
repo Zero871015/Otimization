@@ -292,3 +292,11 @@ std::string Polynomial::Replace(std::string find, std::string target)
 	}
 	return str;
 }
+
+void ShowVars(std::map<std::string, double> m)
+{
+	for (auto i = m.begin(); i != m.end(); i++)
+	{
+		std::cout << i->first << " = " << i->second << std::endl;
+	}
+}

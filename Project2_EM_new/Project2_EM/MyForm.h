@@ -265,16 +265,18 @@ namespace Project2EM {
 		std::map<std::string, double> min;
 		std::map<std::string, double> max;
 		m["x"] = 50;
-		min["x"] = 0;
+		m["y"] = 30;
+		min["x"] = -50;
+		min["y"] = -70;
 		max["x"] = 70;
-		Powell(polys[comboBox1->SelectedIndex], m, min, max);
+		max["y"] = 70;
 		//std::cout << Golden(polys[comboBox1->SelectedIndex], 0, 2, 0) << std::endl;
+		Powell(polys[comboBox1->SelectedIndex], m, min, max);
 	}
 
 	void LoadStartPoint()
 	{
 		std::string str;
-		double d;
 
 		//convert C# String to c++ std::string.
 		using System::Runtime::InteropServices::Marshal;
