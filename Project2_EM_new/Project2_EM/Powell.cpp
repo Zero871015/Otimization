@@ -8,13 +8,14 @@
 std::map<std::string, double> Powell(Polynomial p, std::map<std::string, double> startPoint, std::map<std::string, double> min, std::map<std::string, double> max)
 {
 	double num;
-	for (int k = 0; k < 100; k++)	//most do 1000 times
+	for (int k = 0; k < 100; k++)	//most do 100 times
 	{
 		num = p.Solution(startPoint);
 		std::map<std::string, double> s;
 		int count = 1;
 		for (auto i = startPoint.begin(); i != startPoint.end(); i++)	//search for each dirction
 		{
+			//replace varables
 			Polynomial p2 = p;
 			for (auto j = startPoint.begin(); j != startPoint.end(); j++)
 			{
@@ -48,6 +49,7 @@ std::map<std::string, double> Powell(Polynomial p, std::map<std::string, double>
 		double s_min = -1000000, s_max = 1000000;
 		for (auto j = s.begin(), t = startPoint.begin(); j != s.end(); j++,t++)
 		{
+			//replace varables
 			std::ostringstream strs;
 			strs << t->second;
 			strs << "+X*";
@@ -66,7 +68,7 @@ std::map<std::string, double> Powell(Polynomial p, std::map<std::string, double>
 				temp = (max[j->first] - startPoint[j->first]) / j->second;
 				s_max = s_max > temp ? temp : s_max;
 			}
-			else
+			else	//if coefficient < 0 max and min need to exchange
 			{
 				temp = (min[j->first] - startPoint[j->first]) / j->second;
 				s_max = s_max > temp ? temp : s_max;

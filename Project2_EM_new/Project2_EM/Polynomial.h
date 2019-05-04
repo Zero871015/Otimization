@@ -10,7 +10,7 @@ public:
 	Polynomial();
 	Polynomial(std::string);
 
-	Polynomial diff();
+	double diff(std::string, std::map<std::string, double> m);
 	double Solution(std::map<std::string,double>);
 	double Solution(double);
 	std::string Replace(std::string, std::string);

@@ -272,15 +272,18 @@ namespace Project2EM {
 		/*m["x"] = 50;
 		min["x"] = 0;
 		max["x"] = 70;*/
-		m["x"] = 50;
+		/*m["x"] = 50;
 		min["x"] = -50;
 		max["x"] = 70;
 		m["y"] = 30;
 		min["y"] = -70;
-		max["y"] = 70;
+		max["y"] = 70;*/
 		//std::cout << Golden(polys[comboBox1->SelectedIndex], 0, 2, 0) << std::endl;
-		if(comboBox2->SelectedIndex==0)
-			Powell(polys[comboBox1->SelectedIndex], m, min, max);
+		/*if(comboBox2->SelectedIndex==0)
+			Powell(polys[comboBox1->SelectedIndex], m, min, max);*/
+		m["x"] = 2;
+		m["y"] = 2;
+		polys[comboBox1->SelectedIndex].diff("x", m);
 	}
 
 	void LoadStartPoint()
