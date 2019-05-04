@@ -8,7 +8,7 @@
 std::map<std::string, double> Powell(Polynomial p, std::map<std::string, double> startPoint, std::map<std::string, double> min, std::map<std::string, double> max)
 {
 	double num;
-	for (int k = 0; k < 1000; k++)	//most do 1000 times
+	for (int k = 0; k < 100; k++)	//most do 1000 times
 	{
 		num = p.Solution(startPoint);
 		std::map<std::string, double> s;
@@ -58,11 +58,22 @@ std::map<std::string, double> Powell(Polynomial p, std::map<std::string, double>
 
 			//compute min,max
 			double temp;
-			temp = (min[j->first] - startPoint[j->first]) / j->second;
-			s_min = s_min < temp ? temp : s_min;
+			if (j->second>0)
+			{
+				temp = (min[j->first] - startPoint[j->first]) / j->second;
+				s_min = s_min < temp ? temp : s_min;
 
-			temp = (max[j->first] - startPoint[j->first]) / j->second;
-			s_max = s_max > temp ? temp : s_max;
+				temp = (max[j->first] - startPoint[j->first]) / j->second;
+				s_max = s_max > temp ? temp : s_max;
+			}
+			else
+			{
+				temp = (min[j->first] - startPoint[j->first]) / j->second;
+				s_max = s_max > temp ? temp : s_max;
+
+				temp = (max[j->first] - startPoint[j->first]) / j->second;
+				s_min = s_min < temp ? temp : s_min;
+			}
 		}
 		//find step size
 		double X = Golden(p2, s_min, s_max);
@@ -74,12 +85,12 @@ std::map<std::string, double> Powell(Polynomial p, std::map<std::string, double>
 		}
 #ifdef SHOW_PROCESS
 		std::cout << "alpha = " << X << std::endl;
-		std::cout << "S" << count << "[";
+		std::cout << "S" << count - 1 << "[";
 		for (auto j = s.begin(); j != s.end(); j++)
 			std::cout << X * j->second << " ";
 		std::cout << "]" << std::endl;
 
-		std::cout << "X" << count + 1 << "[";
+		std::cout << "X" << count << "[";
 		for (auto j = startPoint.begin(); j != startPoint.end(); j++)
 			std::cout << j->second << " ";
 		std::cout << "]" << std::endl << std::endl;

@@ -192,7 +192,12 @@ namespace Project2EM {
 			// 
 			// comboBox2
 			// 
+			this->comboBox2->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
 			this->comboBox2->FormattingEnabled = true;
+			this->comboBox2->Items->AddRange(gcnew cli::array< System::Object^  >(5) {
+				L"Powell¡¦s Method ", L"Newton Method ", L"Steep Descent Algorithm ",
+					L"Quasi-Newton Method ", L"Conjugate Gradient Methods "
+			});
 			this->comboBox2->Location = System::Drawing::Point(622, 197);
 			this->comboBox2->Name = L"comboBox2";
 			this->comboBox2->Size = System::Drawing::Size(149, 23);
@@ -264,14 +269,18 @@ namespace Project2EM {
 		std::map<std::string, double> m;
 		std::map<std::string, double> min;
 		std::map<std::string, double> max;
+		/*m["x"] = 50;
+		min["x"] = 0;
+		max["x"] = 70;*/
 		m["x"] = 50;
-		m["y"] = 30;
 		min["x"] = -50;
-		min["y"] = -70;
 		max["x"] = 70;
+		m["y"] = 30;
+		min["y"] = -70;
 		max["y"] = 70;
 		//std::cout << Golden(polys[comboBox1->SelectedIndex], 0, 2, 0) << std::endl;
-		Powell(polys[comboBox1->SelectedIndex], m, min, max);
+		if(comboBox2->SelectedIndex==0)
+			Powell(polys[comboBox1->SelectedIndex], m, min, max);
 	}
 
 	void LoadStartPoint()

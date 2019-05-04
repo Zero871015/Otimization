@@ -2,8 +2,6 @@
 
 Project2/
 
-*.vcxproj
-*.filters
 /Project2_EM_new/.vs/Project2_EM/v15
 /Project2_EM_new/Project2_EM/x64/Debug
 /Project2_EM_new/Project2_EM/Debug
