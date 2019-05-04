@@ -5,17 +5,17 @@
 
 #define SHOW_PROCESS
 
-std::map<std::string, double> Powell(Polynomial p, std::map<std::string, double> startPoint, std::map<std::string, double> min, std::map<std::string, double> max)
+System::String^ Powell(Polynomial p, std::map<std::string, double> startPoint, std::map<std::string, double> min, std::map<std::string, double> max)
 {
+	System::String^ outputdata = gcnew System::String("");
 	double num;
-	for (int k = 0; k < 100; k++)	//most do 100 times
+	for (int k = 0; k < 100; k++)	//most do 1000 times
 	{
 		num = p.Solution(startPoint);
 		std::map<std::string, double> s;
 		int count = 1;
 		for (auto i = startPoint.begin(); i != startPoint.end(); i++)	//search for each dirction
 		{
-			//replace varables
 			Polynomial p2 = p;
 			for (auto j = startPoint.begin(); j != startPoint.end(); j++)
 			{
@@ -30,15 +30,21 @@ std::map<std::string, double> Powell(Polynomial p, std::map<std::string, double>
 				p2.data = p2.Replace(j->first, str);
 			}
 			//find step size by golden section
-			double X = Golden(p2, min[i->first] - startPoint[i->first], max[i->first]- startPoint[i->first]);
+			double X = Golden(p2, min[i->first] - startPoint[i->first], max[i->first] - startPoint[i->first]);
 			startPoint[i->first] += X;
 			s[i->first] = X;
 
 #ifdef SHOW_PROCESS
 			std::cout << "X" << count << "[";
+			outputdata += "X" + count + "[";
 			for (auto j = startPoint.begin(); j != startPoint.end(); j++)
+			{
 				std::cout << j->second << " ";
+				outputdata += j->second + " ";
+			}
+
 			std::cout << "]" << std::endl;
+			outputdata += "]\r\n";
 #endif // SHOW_PROCESS
 
 			count++;
@@ -47,9 +53,8 @@ std::map<std::string, double> Powell(Polynomial p, std::map<std::string, double>
 		//do the mix dirction S
 		Polynomial p2 = p;
 		double s_min = -1000000, s_max = 1000000;
-		for (auto j = s.begin(), t = startPoint.begin(); j != s.end(); j++,t++)
+		for (auto j = s.begin(), t = startPoint.begin(); j != s.end(); j++, t++)
 		{
-			//replace varables
 			std::ostringstream strs;
 			strs << t->second;
 			strs << "+X*";
@@ -60,7 +65,7 @@ std::map<std::string, double> Powell(Polynomial p, std::map<std::string, double>
 
 			//compute min,max
 			double temp;
-			if (j->second>0)
+			if (j->second > 0)
 			{
 				temp = (min[j->first] - startPoint[j->first]) / j->second;
 				s_min = s_min < temp ? temp : s_min;
@@ -68,7 +73,7 @@ std::map<std::string, double> Powell(Polynomial p, std::map<std::string, double>
 				temp = (max[j->first] - startPoint[j->first]) / j->second;
 				s_max = s_max > temp ? temp : s_max;
 			}
-			else	//if coefficient < 0 max and min need to exchange
+			else
 			{
 				temp = (min[j->first] - startPoint[j->first]) / j->second;
 				s_max = s_max > temp ? temp : s_max;
@@ -88,14 +93,22 @@ std::map<std::string, double> Powell(Polynomial p, std::map<std::string, double>
 #ifdef SHOW_PROCESS
 		std::cout << "alpha = " << X << std::endl;
 		std::cout << "S" << count - 1 << "[";
+		outputdata += "alpha = " + X + "\r\nS" + (count - 1) + "[";
 		for (auto j = s.begin(); j != s.end(); j++)
+		{
 			std::cout << X * j->second << " ";
+			outputdata += (X*j->second) + " ";
+		}
 		std::cout << "]" << std::endl;
-
 		std::cout << "X" << count << "[";
+		outputdata += "]\r\nX" + count + "[";
 		for (auto j = startPoint.begin(); j != startPoint.end(); j++)
+		{
 			std::cout << j->second << " ";
+			outputdata += j->second + " ";
+		}
 		std::cout << "]" << std::endl << std::endl;
+		outputdata += "]\r\n\r\n";
 #endif // SHOW_PROCESS
 		double num2 = p.Solution(startPoint);
 
@@ -104,9 +117,10 @@ std::map<std::string, double> Powell(Polynomial p, std::map<std::string, double>
 	}
 #ifdef SHOW_PROCESS
 	std::cout << "min = " << num << std::endl;
+	outputdata += "min = " + num + "\r\n";
 #endif // SHOW_PROCESS
 
 
 
-	return startPoint;
+	return outputdata;
 }

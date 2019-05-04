@@ -151,6 +151,7 @@ namespace Project2EM {
 			this->textBox3->ScrollBars = System::Windows::Forms::ScrollBars::Vertical;
 			this->textBox3->Size = System::Drawing::Size(191, 206);
 			this->textBox3->TabIndex = 0;
+			this->textBox3->Text = L"initial point : [x]\r\n = [50]\r\ninterval :\r\nx = [0 ,70 ]";
 			// 
 			// label3
 			// 
@@ -265,10 +266,78 @@ namespace Project2EM {
 		
 	}
 	private: System::Void button2_Click(System::Object^  sender, System::EventArgs^  e) {
-		
+
 		std::map<std::string, double> m;
 		std::map<std::string, double> min;
 		std::map<std::string, double> max;
+
+		System::String^ outputdata = gcnew System::String("");
+		std::string input_par = "";
+		int l_parentheses = 0;
+		int r_parentheses = 0;
+		int next = 0;
+
+		std::vector<std::string> data_d; //initial data
+		std::vector<std::string> data_s; // parameter name
+		input_par = LoadStartPoint();
+		/*	std::cout << temp_s << std::endl;*/
+
+		r_parentheses = input_par.find("]", next);
+		//get parameter name
+		for (l_parentheses = input_par.find("[", next); l_parentheses < r_parentheses; l_parentheses = next)
+		{
+			std::string temp = "";
+			next = input_par.find(",", next + 1);
+			if (next >= r_parentheses)
+			{
+				next = r_parentheses;
+			}
+			temp += input_par.substr(l_parentheses + 1, next - l_parentheses - 1);
+			data_s.push_back(temp);
+		}
+
+		r_parentheses = input_par.find("]", next + 1);
+		//get parameter initial point
+		for (l_parentheses = input_par.find("[", next); l_parentheses < r_parentheses; l_parentheses = next)
+		{
+			std::string temp = "";
+			next = input_par.find(",", next + 1);
+			if (next >= r_parentheses)
+			{
+				next = r_parentheses;
+			}
+			temp += input_par.substr(l_parentheses + 1, next - l_parentheses - 1);
+			data_d.push_back(temp);
+		}
+
+		//initial value insert
+		for (int i = 0; i < (int)data_s.size(); i++)
+		{
+			m[data_s[i]] = std::stod(data_d[i]);
+		}
+
+
+		next = input_par.find("\n", next + 1);
+		//get interval
+		for (int i = 0; i < (int)data_s.size(); i++)
+		{
+			std::string par_name = "";
+			next = input_par.find("\n", next + 1);
+			r_parentheses = input_par.find("]", next + 1);
+			l_parentheses = input_par.find("[", next);
+
+			int q = input_par.find("=", next);
+			par_name = input_par.substr(next + 1, input_par.find("=", next) - next - 1);
+			next = input_par.find(",", next + 1);
+			for (int j = 0; j < (int)par_name.length(); j++)
+			{
+				if (par_name[j] == ' ')
+					par_name.erase(par_name.begin() + j--);
+			}
+			min[par_name] = stod(input_par.substr(l_parentheses + 1, next - l_parentheses - 1));
+			max[par_name] = stod(input_par.substr(next + 1, r_parentheses - next - 1));
+
+		}
 		/*m["x"] = 50;
 		min["x"] = 0;
 		max["x"] = 70;*/
@@ -279,14 +348,14 @@ namespace Project2EM {
 		min["y"] = -70;
 		max["y"] = 70;*/
 		//std::cout << Golden(polys[comboBox1->SelectedIndex], 0, 2, 0) << std::endl;
-		/*if(comboBox2->SelectedIndex==0)
-			Powell(polys[comboBox1->SelectedIndex], m, min, max);*/
-		m["x"] = 2;
-		m["y"] = 2;
-		polys[comboBox1->SelectedIndex].diff("x", m);
+		if (comboBox2->SelectedIndex == 0)
+			outputdata = Powell(polys[comboBox1->SelectedIndex], m, min, max);
+		textBox2->Text = outputdata;
+		/*System::String^ s = gcnew System::String((*outputdata).c_str());
+		textBox2->Text = s;*/
 	}
 
-	void LoadStartPoint()
+	std::string LoadStartPoint()
 	{
 		std::string str;
 
@@ -296,6 +365,7 @@ namespace Project2EM {
 		char* charPointer = reinterpret_cast<char*>(pointer.ToPointer());
 		std::string returnString(charPointer, textBox3->Text->Length);
 		Marshal::FreeHGlobal(pointer);
+		return returnString;
 	}
 };
 }
