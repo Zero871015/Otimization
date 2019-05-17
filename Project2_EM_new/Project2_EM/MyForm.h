@@ -6,6 +6,7 @@
 #include "Quasi.h"
 #include "Exceptions.h"
 #include "SteepDescent.h"
+#include "ConjugateGradient.h"
 #include <vector>
 
 
@@ -360,6 +361,8 @@ namespace Project2EM {
 				outputdata = SteepDescent(polys[comboBox1->SelectedIndex], m, min, max);
 			else if (comboBox2->SelectedIndex == 3)
 				outputdata = QuasiNewton(polys[comboBox1->SelectedIndex], m);
+			else if (comboBox2->SelectedIndex == 4)
+				outputdata = ConjugateGradient(polys[comboBox1->SelectedIndex], m, min, max);
 			textBox2->Text = outputdata;
 
 			/*System::String^ s = gcnew System::String((*outputdata).c_str());

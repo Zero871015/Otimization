@@ -135,6 +135,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ConjugateGradient.cpp" />
     <ClCompile Include="Exceptions.cpp" />
     <ClCompile Include="Golden.cpp" />
     <ClCompile Include="InorderToPostorder.cpp" />
@@ -148,6 +149,7 @@
     <ClCompile Include="SteepDescent.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ConjugateGradient.h" />
     <ClInclude Include="Exceptions.h" />
     <ClInclude Include="Golden.h" />
     <ClInclude Include="InorderToPostorder.h" />

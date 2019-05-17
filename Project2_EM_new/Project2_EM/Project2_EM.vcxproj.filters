@@ -48,6 +48,9 @@
     <ClCompile Include="Quasi.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
+    <ClCompile Include="ConjugateGradient.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyForm.h">
@@ -81,6 +84,9 @@
       <Filter>標頭檔</Filter>
     </ClInclude>
     <ClInclude Include="Quasi.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="ConjugateGradient.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
   </ItemGroup>
