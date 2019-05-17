@@ -2,6 +2,9 @@
 #include "Polynomial.h"
 #include "Golden.h"
 #include "Powell.h"
+#include "Newton.h"
+#include "Quasi.h"
+#include "Exceptions.h"
 #include "SteepDescent.h"
 #include <vector>
 
@@ -284,79 +287,92 @@ namespace Project2EM {
 		input_par = LoadStartPoint();
 		/*	std::cout << temp_s << std::endl;*/
 
-		r_parentheses = input_par.find("]", next);
-		//get parameter name
-		for (l_parentheses = input_par.find("[", next); l_parentheses < r_parentheses; l_parentheses = next)
+		if (input_par.find("initial") != -1)
 		{
-			std::string temp = "";
-			next = input_par.find(",", next + 1);
-			if (next >= r_parentheses)
+			r_parentheses = input_par.find("]", next);
+			//get parameter name
+			for (l_parentheses = input_par.find("[", next); l_parentheses < r_parentheses; l_parentheses = next)
 			{
-				next = r_parentheses;
+				std::string temp = "";
+				next = input_par.find(",", next + 1);
+				if (next >= r_parentheses || next == -1)
+				{
+					next = r_parentheses;
+				}
+				temp += input_par.substr(l_parentheses + 1, next - l_parentheses - 1);
+				data_s.push_back(temp);
 			}
-			temp += input_par.substr(l_parentheses + 1, next - l_parentheses - 1);
-			data_s.push_back(temp);
-		}
 
-		r_parentheses = input_par.find("]", next + 1);
-		//get parameter initial point
-		for (l_parentheses = input_par.find("[", next); l_parentheses < r_parentheses; l_parentheses = next)
-		{
-			std::string temp = "";
-			next = input_par.find(",", next + 1);
-			if (next >= r_parentheses)
-			{
-				next = r_parentheses;
-			}
-			temp += input_par.substr(l_parentheses + 1, next - l_parentheses - 1);
-			data_d.push_back(temp);
-		}
-
-		//initial value insert
-		for (int i = 0; i < (int)data_s.size(); i++)
-		{
-			m[data_s[i]] = std::stod(data_d[i]);
-		}
-
-
-		next = input_par.find("\n", next + 1);
-		//get interval
-		for (int i = 0; i < (int)data_s.size(); i++)
-		{
-			std::string par_name = "";
-			next = input_par.find("\n", next + 1);
 			r_parentheses = input_par.find("]", next + 1);
-			l_parentheses = input_par.find("[", next);
-
-			int q = input_par.find("=", next);
-			par_name = input_par.substr(next + 1, input_par.find("=", next) - next - 1);
-			next = input_par.find(",", next + 1);
-			for (int j = 0; j < (int)par_name.length(); j++)
+			//get parameter initial point
+			for (l_parentheses = input_par.find("[", next); l_parentheses < r_parentheses; l_parentheses = next)
 			{
-				if (par_name[j] == ' ')
-					par_name.erase(par_name.begin() + j--);
+				std::string temp = "";
+				next = input_par.find(",", next + 1);
+				if (next >= r_parentheses || next == -1)
+				{
+					next = r_parentheses;
+				}
+				temp += input_par.substr(l_parentheses + 1, next - l_parentheses - 1);
+				data_d.push_back(temp);
 			}
-			min[par_name] = stod(input_par.substr(l_parentheses + 1, next - l_parentheses - 1));
-			max[par_name] = stod(input_par.substr(next + 1, r_parentheses - next - 1));
+
+			//initial value insert
+			for (int i = 0; i < (int)data_s.size(); i++)
+			{
+				m[data_s[i]] = std::stod(data_d[i]);
+			}
+		}
+
+		if (input_par.find("interval") != -1)
+		{
+			next = input_par.find("\n", next + 1);
+			//get interval
+			for (int i = 0; i < (int)data_s.size(); i++)
+			{
+				std::string par_name = "";
+				next = input_par.find("\n", next + 1);
+				r_parentheses = input_par.find("]", next + 1);
+				l_parentheses = input_par.find("[", next);
+
+
+				par_name = input_par.substr(next + 1, input_par.find("=", next) - next - 1);
+				next = input_par.find(",", next + 1);
+				for (int j = 0; j < (int)par_name.length(); j++)
+				{
+					if (par_name[j] == ' ')
+						par_name.erase(par_name.begin() + j--);
+				}
+				min[par_name] = stod(input_par.substr(l_parentheses + 1, next - l_parentheses - 1));
+				max[par_name] = stod(input_par.substr(next + 1, r_parentheses - next - 1));
+
+			}
+		}
+
+		try
+		{
+			Powell_NoInterval(polys[comboBox1->SelectedIndex], m);
+			if (comboBox2->SelectedIndex == 0)
+				outputdata = Powell(polys[comboBox1->SelectedIndex], m, min, max);
+			else if (comboBox2->SelectedIndex == 1)
+				outputdata = Newton(polys[comboBox1->SelectedIndex], m);
+			else if (comboBox2->SelectedIndex == 2)
+				outputdata = SteepDescent(polys[comboBox1->SelectedIndex], m, min, max);
+			else if (comboBox2->SelectedIndex == 3)
+				outputdata = QuasiNewton(polys[comboBox1->SelectedIndex], m);
+			textBox2->Text = outputdata;
+
+			/*System::String^ s = gcnew System::String((*outputdata).c_str());
+			textBox2->Text = s;*/
+		}
+		catch (Exceptions e)
+		{
+			textBox2->Text = "error";
+		}
+		catch (...)
+		{
 
 		}
-		/*m["x"] = 50;
-		min["x"] = 0;
-		max["x"] = 70;*/
-		/*m["x"] = 50;
-		min["x"] = -50;
-		max["x"] = 70;
-		m["y"] = 30;
-		min["y"] = -70;
-		max["y"] = 70;*/
-		//std::cout << Golden(polys[comboBox1->SelectedIndex], 0, 2, 0) << std::endl;
-		if (comboBox2->SelectedIndex == 0)
-			outputdata = Powell(polys[comboBox1->SelectedIndex], m, min, max);
-		else if (comboBox2->SelectedIndex == 2)
-			outputdata = SteepDescent(polys[comboBox1->SelectedIndex], m, min, max);
-		textBox2->Text = outputdata;
-		/*System::String^ s = gcnew System::String((*outputdata).c_str());
-		textBox2->Text = s;*/
 	}
 
 	std::string LoadStartPoint()

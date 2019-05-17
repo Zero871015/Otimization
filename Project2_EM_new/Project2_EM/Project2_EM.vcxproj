@@ -135,21 +135,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Exceptions.cpp" />
     <ClCompile Include="Golden.cpp" />
     <ClCompile Include="InorderToPostorder.cpp" />
+    <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="MyForm.cpp" />
+    <ClCompile Include="MyVector.cpp" />
+    <ClCompile Include="Newton.cpp" />
     <ClCompile Include="Polynomial.cpp" />
     <ClCompile Include="Powell.cpp" />
+    <ClCompile Include="Quasi.cpp" />
     <ClCompile Include="SteepDescent.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Exceptions.h" />
     <ClInclude Include="Golden.h" />
     <ClInclude Include="InorderToPostorder.h" />
+    <ClInclude Include="Matrix.h" />
     <ClInclude Include="MyForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="MyVector.h" />
+    <ClInclude Include="Newton.h" />
     <ClInclude Include="Polynomial.h" />
     <ClInclude Include="Powell.h" />
+    <ClInclude Include="Quasi.h" />
     <ClInclude Include="SteepDescent.h" />
   </ItemGroup>
   <ItemGroup>

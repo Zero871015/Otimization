@@ -10,7 +10,7 @@ System::String^ Powell(Polynomial p, std::map<std::string, double> startPoint, s
 {
 	System::String^ outputdata = gcnew System::String("");
 	double num;
-	for (int k = 0; k < 100; k++)	//most do 1000 times
+	for (int k = 0; k < 100; k++)	//most do 100 times
 	{
 		num = p.Solution(startPoint);
 		std::map<std::string, double> s;
@@ -139,4 +139,35 @@ System::String^ Powell(Polynomial p, std::map<std::string, double> startPoint, s
 
 
 	return outputdata;
+}
+
+double Powell_NoInterval(Polynomial p, std::map<std::string, double> startPoint)
+{
+	System::String^ outputdata = gcnew System::String("");
+	double num;
+	double stepsize = 0.1;
+
+	for (int k = 0; k < 1000; k++)	//most do 1000 times
+	{
+		num = p.Solution(startPoint);
+		std::map<std::string, double> s;
+		int count = 1;
+		for (auto i = startPoint.begin(); i != startPoint.end(); i++)	//search for each dirction
+		{
+			std::map<std::string, double> Pa = startPoint;
+			std::map<std::string, double> Pb = startPoint;
+			Pa[i->first] += stepsize;
+			double A = p.Solution(Pa);
+			Pb[i->first] -= stepsize;
+			double B = p.Solution(Pb);
+			if (A > B)startPoint[i->first] = Pb[i->first];
+			else startPoint[i->first] = Pa[i->first];
+		}
+		double num2 = p.Solution(startPoint);
+
+		if (abs(num - num2) < 0.00001)break;
+		//if (delta < 0.00001)break;
+	}
+
+	return num;
 }

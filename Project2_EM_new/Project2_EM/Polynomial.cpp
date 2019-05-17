@@ -22,6 +22,68 @@ Polynomial::Polynomial(std::string str)
 	//std::cout << Postorder(str) << std::endl;
 }
 
+std::string getEquation(std::string target, std::string equation, std::map<std::string, std::string>mem)
+{
+	std::string str = equation;
+	std::string temp_s, replaceStr;
+	int start = 0, blank = 0, point = 0;
+	bool isEnd = false;
+	while (1)
+	{
+		blank = str.find(" ", start);
+		if (blank == -1) //last variable
+		{
+			blank = str.length();
+		}
+		temp_s = str.substr(start, blank - start);
+		if (mem.find(temp_s) != mem.end() && temp_s != target)
+		{
+			str.erase(start, blank - start);
+			replaceStr = "( " + mem[temp_s] + " )";
+			str.insert(start, replaceStr);
+			start = 0;
+		}
+		else
+		{
+			start = blank + 1;
+		}
+		if (start == str.length() + 1)
+		{
+			break;
+		}
+	}
+
+	start = 0;
+	std::string temp_str = str;
+	while (1)
+	{
+		int count = 0;
+		point = str.find("\'", start);
+		if (point != -1)
+		{
+			while (str[point + count] != ' ')count++;
+			temp_s = str.substr(point + 1, count - 1);
+			str.erase(point, count);
+			if (temp_s != target)
+			{
+				str.insert(point, "0 ");
+			}
+			else
+			{
+				str.insert(point, "1 ");
+			}
+		}
+		else
+		{
+			break;
+		}
+		start = point + 1;
+	}
+
+
+	return str;
+}
+
 //TODO: Recursion to get differnetial. Should used only in diff().
 double diff_Solution(std::string target,std::map<std::string, std::string> &mem)
 {
@@ -742,4 +804,230 @@ void ShowVars(std::map<std::string, double> m)
 	{
 		std::cout << i->first << " = " << i->second << std::endl;
 	}
+}
+
+std::string Polynomial::partial(std::string target, std::map<std::string, double> m)
+{
+	Polynomial p = *this;
+
+
+	std::string str = Postorder(p.data);
+	std::map<std::string, std::string> mem;
+	int count = 0;
+	std::vector<std::string> stackNumber;	//一個stack用於存放運算元
+	std::string temp = "";	//一個暫存空間
+	for (int i = 0; i < (int)str.length(); i++)
+	{
+		std::string count_s = "X";
+		//假如遇上分隔字元...
+		if (str[i] == ' ')
+		{
+			//判斷其是否為運算子
+			if ((int)temp.length() == 1 && (isOperator(temp[0]) || temp == "@"))
+			{
+				int size = (int)stackNumber.size();
+				std::string var;
+				//從堆疊拿出兩個數做加法
+				if (temp == "+")
+				{
+					if (size < 2)
+					{
+						//錯誤，運算式有錯誤
+					}
+					var = stackNumber[size - 2] + " + " + stackNumber[size - 1];
+					std::ostringstream strs;
+					strs << count++;
+					count_s += strs.str();
+					mem[count_s] = var;
+					stackNumber.pop_back();
+					stackNumber.pop_back();
+					stackNumber.push_back(count_s);
+					size--;
+				}
+				//從堆疊拿出兩個數做減法
+				else if (temp == "-")
+				{
+					if (size < 2)
+					{
+						//錯誤，運算式有錯誤
+					}
+					var = stackNumber[size - 2] + " - " + stackNumber[size - 1];
+					std::ostringstream strs;
+					strs << count++;
+					count_s += strs.str();
+					mem[count_s] = var;
+					stackNumber.pop_back();
+					stackNumber.pop_back();
+					stackNumber.push_back(count_s);
+					size--;
+				}
+				//從堆疊拿出兩個數做乘法
+				else if (temp == "*")
+				{
+					if (size < 2)
+					{
+						//錯誤，運算式有錯誤
+					}
+					var = stackNumber[size - 2] + " * " + stackNumber[size - 1];
+					std::ostringstream strs;
+					strs << count++;
+					count_s += strs.str();
+					mem[count_s] = var;
+					stackNumber.pop_back();
+					stackNumber.pop_back();
+					stackNumber.push_back(count_s);
+					size--;
+				}
+				//從堆疊拿出兩個數做除法
+				else if (temp == "/")
+				{
+					if (size < 2)
+					{
+						//錯誤，運算式有錯誤
+					}
+					var = stackNumber[size - 2] + " / " + stackNumber[size - 1];
+					std::ostringstream strs;
+					strs << count++;
+					count_s += strs.str();
+					mem[count_s] = var;
+					stackNumber.pop_back();
+					stackNumber.pop_back();
+					stackNumber.push_back(count_s);
+					size--;
+				}
+				//從堆疊拿出一個數加負號
+				else if (temp == "@")
+				{
+					if (size < 1)
+					{
+						//錯誤，運算式有錯誤
+					}
+					var = " -1 * " + stackNumber[size - 1];
+					std::ostringstream strs;
+					strs << count++;
+					count_s += strs.str();
+					mem[count_s] = var;
+					stackNumber.pop_back();
+					stackNumber.push_back(count_s);
+				}
+				//從堆疊拿出兩個數做次方
+				else if (temp == "^")
+				{
+					if (size < 2)
+					{
+						//錯誤，運算式有錯誤
+					}
+					var = stackNumber[size - 2] + " ^ " + stackNumber[size - 1];
+					std::ostringstream strs;
+					strs << count++;
+					count_s += strs.str();
+					mem[count_s] = var;
+					stackNumber.pop_back();
+					stackNumber.pop_back();
+					stackNumber.push_back(count_s);
+					size--;
+				}
+				//從堆疊拿出一個數做階層
+				else if (temp == "!")
+				{
+					//錯誤，運算式有錯誤
+				}
+			}
+			//不是運算符號，代表其為運算元
+			//將此數放入堆疊中
+			else
+			{
+				//變數第一個字為英文
+				if ((temp[0] >= 'a'&&temp[0] <= 'z') || (temp[0] >= 'A'&&temp[0] <= 'Z'))
+				{
+					stackNumber.push_back(temp);
+				}
+				//不是變數，判斷其為小數還是整數
+				else
+				{
+					int isPoint = 0;
+					for (int i = 0; i < (int)temp.length(); i++)
+					{
+						if (temp[i] == '.')
+						{
+							if (isPoint++ > 0)
+							{
+								//錯誤，運算式有錯誤
+							}
+						}
+						else if (temp[i] > '9' || temp[i] < '0')
+						{
+							//錯誤，運算式有錯誤
+						}
+					}
+					stackNumber.push_back(temp);
+				}
+
+			}
+			temp = "";
+		}
+		else
+		{
+			//還沒遇到分隔符號，代表該字元與前面是一體的
+			temp += str[i];
+		}
+	}
+
+	for (auto i = mem.begin(); i != mem.end(); i++)
+	{
+		std::string parsho = "\'";
+		std::string parts[3] = { "","","" };
+		std::string var = "";
+		for (int j = 0, k = 0; j < (int)i->second.length(); j++)
+		{
+			if (i->second[j] == ' ')
+				k++;
+			else
+				parts[k] += i->second[j];
+		}
+		parsho += i->first;
+
+		if (parts[1] == "+")
+		{
+			var = "\'" + parts[0] + " + " + "\'" + parts[2];
+			mem[parsho] = var;
+		}
+		else if (parts[1] == "-")
+		{
+			var = "\'" + parts[0] + " - " + "\'" + parts[2];
+			mem[parsho] = var;
+		}
+		else if (parts[1] == "*")
+		{
+			var = "\'" + parts[0] + " * " + parts[2] + " + " + parts[0] + " * " + "\'" + parts[2];
+			mem[parsho] = var;
+		}
+		else if (parts[1] == "^")
+		{
+			var = parts[2] + " * \'" + parts[0] + " * " + parts[0] + " ^ ( " + parts[2] + " - 1 )";
+			mem[parsho] = var;
+		}
+		else if (parts[1] == "$")
+		{
+			var = "%(" + parts[2] + ")" + " + \'" + parts[2];
+			mem[parsho] = var;
+		}
+		else if (parts[1] == "%")
+		{
+			var = "-1 * $(" + parts[2] + ")" + " + \'" + parts[2];
+		}
+	}
+	std::string count_s = "\'X";
+	std::ostringstream strs;
+	strs << count - 1;
+	count_s += strs.str();
+	std::ostringstream strs2;
+	strs2 << m[target];
+	mem["X"] = strs2.str();
+
+
+	std::string ans_s;
+	//get diff equation
+	ans_s = getEquation(target, mem[count_s], mem);
+	return ans_s;
 }

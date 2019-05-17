@@ -33,6 +33,21 @@
     <ClCompile Include="SteepDescent.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
+    <ClCompile Include="Exceptions.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+    <ClCompile Include="Matrix.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+    <ClCompile Include="MyVector.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+    <ClCompile Include="Newton.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+    <ClCompile Include="Quasi.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyForm.h">
@@ -51,6 +66,21 @@
       <Filter>標頭檔</Filter>
     </ClInclude>
     <ClInclude Include="SteepDescent.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="Exceptions.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="MyVector.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="Newton.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="Quasi.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
   </ItemGroup>

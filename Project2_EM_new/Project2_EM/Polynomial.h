@@ -13,6 +13,7 @@ public:
 	double diff(std::string, std::map<std::string, double> m);
 	double Solution(std::map<std::string,double>);
 	double Solution(double);
+	std::string Polynomial::partial(std::string target, std::map<std::string, double> m);
 	std::string Replace(std::string, std::string);
 
 	std::string data;
