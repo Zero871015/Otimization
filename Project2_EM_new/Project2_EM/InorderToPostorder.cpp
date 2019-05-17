@@ -73,7 +73,7 @@ std::string Postorder(std::string inorder)
 			isBlank = false;	//重設分隔符號
 
 
-			if (inorder[i] == '~' || inorder[i] == '%')
+			if (inorder[i] == '$' || inorder[i] == '%')
 			{
 				stack.push_back(inorder[i]);
 				continue;

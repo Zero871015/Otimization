@@ -2,7 +2,9 @@
 #include "Polynomial.h"
 #include "Golden.h"
 #include "Powell.h"
+#include "SteepDescent.h"
 #include <vector>
+
 
 namespace Project2EM {
 
@@ -350,6 +352,8 @@ namespace Project2EM {
 		//std::cout << Golden(polys[comboBox1->SelectedIndex], 0, 2, 0) << std::endl;
 		if (comboBox2->SelectedIndex == 0)
 			outputdata = Powell(polys[comboBox1->SelectedIndex], m, min, max);
+		else if (comboBox2->SelectedIndex == 2)
+			outputdata = SteepDescent(polys[comboBox1->SelectedIndex], m, min, max);
 		textBox2->Text = outputdata;
 		/*System::String^ s = gcnew System::String((*outputdata).c_str());
 		textBox2->Text = s;*/

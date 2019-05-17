@@ -3,7 +3,8 @@
 #include "Golden.h"
 #include <sstream>
 
-#define SHOW_PROCESS
+//#define SHOW_PROCESS_CPP
+#define SHOW_PROCESS_CSHARP
 
 System::String^ Powell(Polynomial p, std::map<std::string, double> startPoint, std::map<std::string, double> min, std::map<std::string, double> max)
 {
@@ -33,19 +34,23 @@ System::String^ Powell(Polynomial p, std::map<std::string, double> startPoint, s
 			double X = Golden(p2, min[i->first] - startPoint[i->first], max[i->first] - startPoint[i->first]);
 			startPoint[i->first] += X;
 			s[i->first] = X;
-
-#ifdef SHOW_PROCESS
+#ifdef SHOW_PROCESS_CPP
 			std::cout << "X" << count << "[";
-			outputdata += "X" + count + "[";
 			for (auto j = startPoint.begin(); j != startPoint.end(); j++)
 			{
 				std::cout << j->second << " ";
-				outputdata += j->second + " ";
 			}
 
 			std::cout << "]" << std::endl;
+#endif // SHOW_PROCESS_CPP
+#ifdef SHOW_PROCESS_CSHARP
+			outputdata += "X" + count + "[";
+			for (auto j = startPoint.begin(); j != startPoint.end(); j++)
+			{
+				outputdata += j->second + " ";
+			}
 			outputdata += "]\r\n";
-#endif // SHOW_PROCESS
+#endif // SHOW_PROCESS_CSHARP
 
 			count++;
 		}
@@ -90,33 +95,44 @@ System::String^ Powell(Polynomial p, std::map<std::string, double> startPoint, s
 			startPoint[j->first] += X * j->second;
 			delta += X * j->second;
 		}
-#ifdef SHOW_PROCESS
+#ifdef SHOW_PROCESS_CPP
 		std::cout << "alpha = " << X << std::endl;
 		std::cout << "S" << count - 1 << "[";
-		outputdata += "alpha = " + X + "\r\nS" + (count - 1) + "[";
 		for (auto j = s.begin(); j != s.end(); j++)
 		{
 			std::cout << X * j->second << " ";
-			outputdata += (X*j->second) + " ";
 		}
 		std::cout << "]" << std::endl;
 		std::cout << "X" << count << "[";
-		outputdata += "]\r\nX" + count + "[";
 		for (auto j = startPoint.begin(); j != startPoint.end(); j++)
 		{
 			std::cout << j->second << " ";
-			outputdata += j->second + " ";
 		}
 		std::cout << "]" << std::endl << std::endl;
+#endif // SHOW_PROCESS_CPP
+#ifdef SHOW_PROCESS_CSHARP
+		outputdata += "alpha = " + X + "\r\nS" + (count - 1) + "[";
+		for (auto j = s.begin(); j != s.end(); j++)
+		{
+			outputdata += (X*j->second) + " ";
+		}
+		outputdata += "]\r\nX" + count + "[";
+		for (auto j = startPoint.begin(); j != startPoint.end(); j++)
+		{
+			outputdata += j->second + " ";
+		}
 		outputdata += "]\r\n\r\n";
-#endif // SHOW_PROCESS
+#endif // SHOW_PROCESS_CSHARP
+
 		double num2 = p.Solution(startPoint);
 
 		if (abs(num - num2) < 0.00001)break;
 		//if (delta < 0.00001)break;
 	}
-#ifdef SHOW_PROCESS
+#ifdef SHOW_PROCESS_CPP
 	std::cout << "min = " << num << std::endl;
+#endif // SHOW_PROCESS_CPP
+#ifdef SHOW_PROCESS_CSHARP
 	outputdata += "min = " + num + "\r\n";
 #endif // SHOW_PROCESS
 

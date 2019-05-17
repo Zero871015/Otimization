@@ -140,6 +140,7 @@
     <ClCompile Include="MyForm.cpp" />
     <ClCompile Include="Polynomial.cpp" />
     <ClCompile Include="Powell.cpp" />
+    <ClCompile Include="SteepDescent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Golden.h" />
@@ -149,6 +150,7 @@
     </ClInclude>
     <ClInclude Include="Polynomial.h" />
     <ClInclude Include="Powell.h" />
+    <ClInclude Include="SteepDescent.h" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="MyForm.resx">

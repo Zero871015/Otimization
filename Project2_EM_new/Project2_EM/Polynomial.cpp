@@ -12,11 +12,11 @@ Polynomial::Polynomial(std::string str)
 	//replace sin and cos to % and $
 	for (std::size_t found = str.find("sin"); found != std::string::npos; found = str.find("sin"))
 	{
-		str.replace(str.begin() + found, str.begin() + found + 3, "%");
+		str.replace(str.begin() + found, str.begin() + found + 3, "$");
 	}
 	for (std::size_t found = str.find("cos"); found != std::string::npos; found = str.find("cos"))
 	{
-		str.replace(str.begin() + found, str.begin() + found + 3, "$");
+		str.replace(str.begin() + found, str.begin() + found + 3, "%");
 	}
 	this->data = str;
 	//std::cout << Postorder(str) << std::endl;
@@ -306,6 +306,34 @@ double Polynomial::diff(std::string target, std::map<std::string, double> m)
 				{
 					//錯誤，運算式有錯誤
 				}
+				else if (temp == "$")
+				{
+					if (size < 1)
+					{
+						//錯誤，運算式有錯誤
+					}
+					var = " $ " + stackNumber[size - 1];
+					std::ostringstream strs;
+					strs << count++;
+					count_s += strs.str();
+					mem[count_s] = var;
+					stackNumber.pop_back();
+					stackNumber.push_back(count_s);
+				}
+				else if (temp == "%")
+				{
+					if (size < 1)
+					{
+						//錯誤，運算式有錯誤
+					}
+					var = " % " + stackNumber[size - 1];
+					std::ostringstream strs;
+					strs << count++;
+					count_s += strs.str();
+					mem[count_s] = var;
+					stackNumber.pop_back();
+					stackNumber.push_back(count_s);
+				}
 			}
 			//不是運算符號，代表其為運算元
 			//將此數放入堆疊中
@@ -346,6 +374,8 @@ double Polynomial::diff(std::string target, std::map<std::string, double> m)
 			temp += str[i];
 		}
 	}
+
+	//Build differential tree
 	for (auto i = mem.begin(); i != mem.end(); i++)
 	{
 		std::string parsho = "\'";
@@ -379,6 +409,15 @@ double Polynomial::diff(std::string target, std::map<std::string, double> m)
 		{
 			var = parts[2] + " * \'" + parts[0] + " * " + parts[0] + " ^ (" + parts[2] + "- 1 )";
 			mem[parsho] = var;
+		}
+		else if (parts[1] == "$")
+		{
+			var = "%(" + parts[2] + ")" + " + \'" + parts[2];
+			mem[parsho] = var;
+		}
+		else if (parts[1] == "%")
+		{
+			var = "-1 * $(" + parts[2] + ")" + " + \'" + parts[2];
 		}
 	}
 	std::string count_s = "\'X";
@@ -477,6 +516,22 @@ double Polynomial::Solution(std::map<std::string, double> m)
 				else if (temp == "!")
 				{
 					//錯誤，運算式有錯誤
+				}
+				else if (temp == "$")
+				{
+					if (size < 1)
+					{
+						//錯誤，運算式有錯誤
+					}
+					stackNumber[size - 1] = sin(stackNumber[size - 1]);
+				}
+				else if (temp == "%")
+				{
+					if (size < 1)
+					{
+						//錯誤，運算式有錯誤
+					}
+					stackNumber[size - 1] = cos(stackNumber[size - 1]);
 				}
 			}
 			//不是運算符號，代表其為運算元
@@ -609,6 +664,22 @@ double Polynomial::Solution(double x)
 				else if (temp == "!")
 				{
 					//錯誤，運算式有錯誤
+				}
+				else if (temp == "$")
+				{
+					if (size < 1)
+					{
+						//錯誤，運算式有錯誤
+					}
+					stackNumber[size - 1] = sin(stackNumber[size - 1]);
+				}
+				else if (temp == "%")
+				{
+					if (size < 1)
+					{
+						//錯誤，運算式有錯誤
+					}
+					stackNumber[size - 1] = cos(stackNumber[size - 1]);
 				}
 			}
 			//不是運算符號，代表其為運算元
