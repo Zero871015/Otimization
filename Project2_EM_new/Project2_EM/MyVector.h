@@ -10,6 +10,9 @@ public:
 	MyVector();
 
 	friend std::ostream& operator<<(std::ostream& os, MyVector& v);
+	friend MyVector& operator+(MyVector&, MyVector&);
+	friend MyVector& operator-(MyVector&, MyVector&);
+	friend double &operator*(MyVector&, MyVector&);
 	double &operator[](int index);
 
 	friend MyVector dot(MyVector, MyVector);

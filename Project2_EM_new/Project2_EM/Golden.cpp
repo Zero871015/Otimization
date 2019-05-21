@@ -24,3 +24,21 @@ double Golden(Polynomial p, double min, double max,int count)
 		return (min + max) / 2.0;
 	return Golden(p, min, max, count+1);
 }
+
+double test(Polynomial p, double a, int count)
+{
+	if (count == 500)return a;
+	double num = p.Solution(a);
+	double num2 = p.Solution(a + 0.01);
+	double num3 = p.Solution(a - 0.01);
+	if (num2 > num3)
+	{
+		if (abs(num - num3) < 0.0001) return a - 0.01;
+		else return test(p, a - 0.01, count + 1);
+	}
+	else
+	{
+		if (abs(num - num2) < 0.0001) return a + 0.01;
+		else return test(p, a + 0.01, count + 1);
+	}
+}

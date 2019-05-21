@@ -12,6 +12,9 @@ public:
 	int row();
 	MyVector &operator[](int index);
 	friend std::ostream& operator<<(std::ostream& os, MyMatrix& m);
+	friend MyMatrix& operator+(MyMatrix&, MyMatrix&);
+	friend MyMatrix& operator-(MyMatrix&, MyMatrix&);
+	friend MyMatrix operator*(MyMatrix, MyMatrix);
 
 	friend MyMatrix add(MyMatrix, MyMatrix);
 	friend MyMatrix sub(MyMatrix, MyMatrix);

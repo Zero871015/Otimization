@@ -61,7 +61,7 @@ std::string getEquation(std::string target, std::string equation, std::map<std::
 		point = str.find("\'", start);
 		if (point != -1)
 		{
-			while (str[point + count] != ' ')count++;
+			while (str[point + count] != ' ' && (point + count) < str.length())count++;
 			temp_s = str.substr(point + 1, count - 1);
 			str.erase(point, count);
 			if (temp_s != target)
@@ -85,7 +85,7 @@ std::string getEquation(std::string target, std::string equation, std::map<std::
 }
 
 //TODO: Recursion to get differnetial. Should used only in diff().
-double diff_Solution(std::string target,std::map<std::string, std::string> &mem)
+double diff_Solution(std::string target, std::map<std::string, std::string> &mem)
 {
 	std::string str = Postorder(mem[target]);
 	std::vector<double> stackNumber;	//一個stack用於存放運算元
@@ -167,6 +167,22 @@ double diff_Solution(std::string target,std::map<std::string, std::string> &mem)
 				else if (temp == "!")
 				{
 					//錯誤，運算式有錯誤
+				}
+				else if (temp == "$")
+				{
+					if (size < 1)
+					{
+						//錯誤，運算式有錯誤
+					}
+					stackNumber[size - 1] = sin(stackNumber[size - 1]);
+				}
+				else if (temp == "%")
+				{
+					if (size < 1)
+					{
+						//錯誤，運算式有錯誤
+					}
+					stackNumber[size - 1] = cos(stackNumber[size - 1]);
 				}
 			}
 			//不是運算符號，代表其為運算元
@@ -474,12 +490,13 @@ double Polynomial::diff(std::string target, std::map<std::string, double> m)
 		}
 		else if (parts[1] == "$")
 		{
-			var = "%(" + parts[2] + ")" + " + \'" + parts[2];
+			var = "%(" + parts[2] + ")" + " * \'" + parts[2];
 			mem[parsho] = var;
 		}
 		else if (parts[1] == "%")
 		{
-			var = "-1 * $(" + parts[2] + ")" + " + \'" + parts[2];
+			var = "-1 * $(" + parts[2] + ")" + " * \'" + parts[2];
+			mem[parsho] = var;
 		}
 	}
 	std::string count_s = "\'X";
@@ -932,6 +949,34 @@ std::string Polynomial::partial(std::string target, std::map<std::string, double
 				{
 					//錯誤，運算式有錯誤
 				}
+				else if (temp == "$")
+				{
+					if (size < 1)
+					{
+						//錯誤，運算式有錯誤
+					}
+					var = " $ " + stackNumber[size - 1];
+					std::ostringstream strs;
+					strs << count++;
+					count_s += strs.str();
+					mem[count_s] = var;
+					stackNumber.pop_back();
+					stackNumber.push_back(count_s);
+				}
+				else if (temp == "%")
+				{
+					if (size < 1)
+					{
+						//錯誤，運算式有錯誤
+					}
+					var = " % " + stackNumber[size - 1];
+					std::ostringstream strs;
+					strs << count++;
+					count_s += strs.str();
+					mem[count_s] = var;
+					stackNumber.pop_back();
+					stackNumber.push_back(count_s);
+				}
 			}
 			//不是運算符號，代表其為運算元
 			//將此數放入堆疊中
@@ -1009,12 +1054,13 @@ std::string Polynomial::partial(std::string target, std::map<std::string, double
 		}
 		else if (parts[1] == "$")
 		{
-			var = "%(" + parts[2] + ")" + " + \'" + parts[2];
+			var = "% ( " + parts[2] + " )" + " * \'" + parts[2];
 			mem[parsho] = var;
 		}
 		else if (parts[1] == "%")
 		{
-			var = "-1 * $(" + parts[2] + ")" + " + \'" + parts[2];
+			var = "-1 * $ ( " + parts[2] + " )" + " * \'" + parts[2];
+			mem[parsho] = var;
 		}
 	}
 	std::string count_s = "\'X";

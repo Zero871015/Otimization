@@ -19,7 +19,24 @@ std::ostream& operator<<(std::ostream& os, MyVector& v) {
 		os << std::setprecision(6) << v[i] << " ";
 	}
 	return os;
-};
+}
+
+MyVector & operator+(MyVector &a, MyVector &b)
+{
+	a = add(a, b);
+	return a;
+}
+MyVector & operator-(MyVector &a, MyVector &b)
+{
+	a = sub(a, b);
+	return a;
+}
+double &operator*(MyVector &a, MyVector &b)
+{
+	double ans;
+	ans = dot(a, b)[0];
+	return ans;
+}
 
 int MyVector::dimension()
 {

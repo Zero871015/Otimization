@@ -62,7 +62,7 @@ System::String ^Newton(Polynomial p, std::map<std::string, double> startPoint)
 		{
 			for (int j = 0; j < Hessian.col(); j++)
 			{
-				outputdata += Hessian[i][j] + " ";
+				outputdata += " " + Hessian[i][j];
 			}
 			outputdata += "\r\n";
 		}
@@ -99,7 +99,7 @@ System::String ^Newton(Polynomial p, std::map<std::string, double> startPoint)
 		{
 			for (int j = 0; j < Hessian.col(); j++)
 			{
-				outputdata += Hessian[i][j]+" ";
+				outputdata += " " + Hessian[i][j];
 			}
 			outputdata += "\r\n";
 		}
@@ -116,6 +116,8 @@ System::String ^Newton(Polynomial p, std::map<std::string, double> startPoint)
 		//stop condition
 		if (stop_count == delta_x[0].dimension())
 		{
+			if (step_count < 2)
+				continue;
 			break;
 		}
 		step_count++;

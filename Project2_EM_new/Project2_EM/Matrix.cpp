@@ -35,6 +35,26 @@ std::ostream& operator<<(std::ostream& os, MyMatrix& m) {
 	return os;
 };
 
+MyMatrix& operator+(MyMatrix& a, MyMatrix& b)
+{
+	a = add(a, b);
+	return a;
+}
+
+MyMatrix& operator-(MyMatrix& a, MyMatrix& b)
+{
+	a = sub(a, b);
+	return a;
+}
+
+MyMatrix operator*(MyMatrix a, MyMatrix b)
+{
+	MyMatrix c;
+	c = mul(a, b);
+	return c;
+}
+
+
 int MyMatrix::col()
 {
 	return this->data[0].dimension();

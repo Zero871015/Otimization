@@ -2,7 +2,7 @@
 #include "Golden.h"
 #include <sstream>
 
-#define SHOW_PROCESS_CPP
+//#define SHOW_PROCESS_CPP
 #define SHOW_PROCESS_CSHARP
 
 System::String ^ ConjugateGradient(Polynomial p, std::map<std::string, double> startPoint, std::map<std::string, double> min, std::map<std::string, double> max)
@@ -17,18 +17,22 @@ System::String ^ ConjugateGradient(Polynomial p, std::map<std::string, double> s
 	{
 #ifdef SHOW_PROCESS_CPP
 		std::cout << "i = " << i << std::endl;
-		std::cout << "Si = " << std::endl;
-		std::cout << "[" << std::endl;
 #endif // SHOW_PROCESS_CPP
 #ifdef SHOW_PROCESS_CSHARP
 		outputdata += "i = " + i + "\r\n";
-		outputdata += "Si = \r\n";
-		outputdata += "[\r\n";
 #endif // SHOW_PROCESS_CSHARP
 
 		num = p.Solution(startPoint);
 		if (i == 0)
 		{
+#ifdef SHOW_PROCESS_CPP
+			std::cout << "Si = " << std::endl;
+			std::cout << "[" << std::endl;
+#endif // SHOW_PROCESS_CPP
+#ifdef SHOW_PROCESS_CSHARP
+			outputdata += "Si = \r\n";
+			outputdata += "[\r\n";
+#endif // SHOW_PROCESS_CSHARP
 			for (auto j = startPoint.begin(); j != startPoint.end(); j++)
 			{
 				dir[j->first] = -1 * p.diff(j->first, startPoint);
@@ -49,6 +53,18 @@ System::String ^ ConjugateGradient(Polynomial p, std::map<std::string, double> s
 				mother += pow(j->second, 2);
 			}
 			beta = child / mother;
+			
+#ifdef SHOW_PROCESS_CPP
+			std::cout << "beta = " << beta << std::endl;
+			std::cout << "Si = " << std::endl;
+			std::cout << "[" << std::endl;
+#endif // SHOW_PROCESS_CPP
+#ifdef SHOW_PROCESS_CSHARP
+			outputdata += "beta = " + beta + "\r\n";
+			outputdata += "Si = \r\n";
+			outputdata += "[\r\n";
+#endif // SHOW_PROCESS_CSHARP
+
 			for (auto j = startPoint.begin(); j != startPoint.end(); j++)
 			{
 				dir[j->first] = -1 * p.diff(j->first, startPoint) + beta * dir[j->first];
@@ -100,7 +116,7 @@ System::String ^ ConjugateGradient(Polynomial p, std::map<std::string, double> s
 			}
 		}
 		//find step size
-		double X = Golden(p2, s_min, s_max);
+		double X = test(p2);
 #ifdef SHOW_PROCESS_CPP
 		std::cout << "alpha = " << X << std::endl;
 		std::cout << "Xi = " << std::endl;

@@ -64,6 +64,8 @@ namespace Project2EM {
 	private: System::Windows::Forms::ComboBox^  comboBox2;
 	private: System::Windows::Forms::Label^  label5;
 
+	private: System::Windows::Forms::Button^  button3;
+
 
 
 
@@ -95,6 +97,7 @@ namespace Project2EM {
 			this->label4 = (gcnew System::Windows::Forms::Label());
 			this->comboBox2 = (gcnew System::Windows::Forms::ComboBox());
 			this->label5 = (gcnew System::Windows::Forms::Label());
+			this->button3 = (gcnew System::Windows::Forms::Button());
 			this->SuspendLayout();
 			// 
 			// openFileDialog1
@@ -219,11 +222,22 @@ namespace Project2EM {
 			this->label5->TabIndex = 6;
 			this->label5->Text = L"Method";
 			// 
+			// button3
+			// 
+			this->button3->Location = System::Drawing::Point(622, 251);
+			this->button3->Name = L"button3";
+			this->button3->Size = System::Drawing::Size(149, 37);
+			this->button3->TabIndex = 7;
+			this->button3->Text = L"Save";
+			this->button3->UseVisualStyleBackColor = true;
+			this->button3->Click += gcnew System::EventHandler(this, &MyForm::button3_Click);
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 15);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(784, 617);
+			this->Controls->Add(this->button3);
 			this->Controls->Add(this->label5);
 			this->Controls->Add(this->label4);
 			this->Controls->Add(this->comboBox2);
@@ -249,6 +263,7 @@ namespace Project2EM {
 	private: System::Void openFileDialog1_FileOk(System::Object^  sender, System::ComponentModel::CancelEventArgs^  e) {
 		
 		textBox1->Clear();
+		comboBox1->Items->Clear();
 		StreamReader^ file = gcnew StreamReader(openFileDialog1->FileName);
 		String^ str = file->ReadToEnd();
 		textBox1->Text += str;
@@ -352,7 +367,6 @@ namespace Project2EM {
 
 		try
 		{
-			Powell_NoInterval(polys[comboBox1->SelectedIndex], m);
 			if (comboBox2->SelectedIndex == 0)
 				outputdata = Powell(polys[comboBox1->SelectedIndex], m, min, max);
 			else if (comboBox2->SelectedIndex == 1)
@@ -365,16 +379,42 @@ namespace Project2EM {
 				outputdata = ConjugateGradient(polys[comboBox1->SelectedIndex], m, min, max);
 			textBox2->Text = outputdata;
 
-			/*System::String^ s = gcnew System::String((*outputdata).c_str());
-			textBox2->Text = s;*/
 		}
 		catch (Exceptions e)
 		{
-			textBox2->Text = "error";
+			switch (e.getType())
+			{
+			case error::dimension:
+				std::cout << "Dimension not equal!" << std::endl;
+				textBox2->Text = "Dimension not equal!";
+				break;
+			case error::divideZero:
+				std::cout << "Divide 0!" << std::endl;
+				textBox2->Text = "Divide 0!";
+				break;
+			case error::rowNotEqualCol:
+				std::cout << "Row is not equal col." << std::endl;
+				textBox2->Text = "Row is not equal col.";
+				break;
+			case error::noInverse:
+				std::cout << "No inverse." << std::endl;
+				textBox2->Text = "No inverse.";
+				break;
+			case error::done:
+				break;
+			case error::computeError:
+				std::cout << "Compute error." << std::endl;
+				textBox2->Text = "Compute error.";
+				break;
+			default:
+				std::cout << "wrong";
+				textBox2->Text = "wrong";
+				break;
+			}
 		}
 		catch (...)
 		{
-
+			textBox2->Text = "error";
 		}
 	}
 
@@ -390,5 +430,10 @@ namespace Project2EM {
 		Marshal::FreeHGlobal(pointer);
 		return returnString;
 	}
+private: System::Void button3_Click(System::Object^  sender, System::EventArgs^  e) {
+	StreamWriter ^ sw = gcnew StreamWriter("output.txt");
+	sw->Write(textBox2->Text);
+	sw->Close();
+}
 };
 }
