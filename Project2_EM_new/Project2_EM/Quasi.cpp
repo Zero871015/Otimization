@@ -114,7 +114,7 @@ System::String ^QuasiNewton(Polynomial p, std::map<std::string, double>startpoin
 		Polynomial new_p;
 		new_p.data = changeVar(p, startpoint, dk);
 		alpha = test(new_p);
-
+		if (alpha < 0.05)alpha = 0.05;
 		//get the delta_x
 		delta_x = dk;
 		for (int i = 0; i < delta_x.row(); i++)

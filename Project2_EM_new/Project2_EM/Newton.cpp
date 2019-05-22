@@ -82,7 +82,7 @@ System::String ^Newton(Polynomial p, std::map<std::string, double> startPoint)
 			{
 				stop_count++;
 			}
-			last[0].data[i] += (-1)* delta_x[0].data[i];
+			last[0].data[i] += (-1)* delta_x[0].data[i] * 0.8;
 		}
 
 		index = 0;
